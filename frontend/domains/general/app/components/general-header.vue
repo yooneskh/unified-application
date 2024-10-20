@@ -17,7 +17,7 @@ async function logoutUser() {
 <template>
   <header class="border-b-1">
 
-    <content-container class="flex items-center py-2">
+    <content-container class="flex items-center py-2 gap-1">
 
       <nuxt-link class="text-lg" :to="{ name: 'general.home' }">
         {{ config.brand.title }}
