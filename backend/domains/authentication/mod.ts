@@ -106,12 +106,10 @@ export function install(app: IUnifiedApp) {
   
   
           if (!Config.authentication.verificationTokenStaticCode) {
-            await sendResendMail({
-              authorization: Config.resend.authorization,
-              from: Config.resend.from,
+            await app.sendEmail({
               to: [user.email],
               subject: 'Login Code',
-              text: `Welcome, your login code is: ${verificationToken.code}`,
+              body: `Welcome, your login code is: ${verificationToken.code}`,
             });
           }
   
@@ -172,12 +170,10 @@ export function install(app: IUnifiedApp) {
   
   
         if (!Config.authentication.verificationTokenStaticCode) {
-          await sendResendMail({
-            authorization: Config.resend.authorization,
-            from: Config.resend.from,
+          await app.sendEmail({
             to: [email],
             subject: 'Registration Code',
-            text: `Welcome, your registration code is: ${verificationToken.code}`,
+            body: `Welcome, your registration code is: ${verificationToken.code}`,
           });
         }
   

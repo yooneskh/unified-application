@@ -37,6 +37,13 @@ export const Config = augmentConfiguration({
     authorization: '',
     from: 'Unified Backend <noreply@mail.khoshghadam.com>',
   },
+  brevo: {
+    authorization: '',
+    sender: {
+      name: 'Unified Backend',
+      email: 'noreply@khoshghadam.com',
+    },
+  },
   kavenegar: {
     apiKey: '',
   },
