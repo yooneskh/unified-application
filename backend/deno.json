@@ -1,5 +1,6 @@
 {
   "imports": {
+    "@std/fs": "jsr:@std/fs@1.0.5",
     "unified-kv": "jsr:@unified/kv@0.4.2",
     "unified-deno-config": "jsr:@unified/deno-config@1.0.2",
     "radash": "npm:radash@12.1.0",

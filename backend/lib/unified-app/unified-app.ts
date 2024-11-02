@@ -20,12 +20,13 @@ export function createUnifiedApp(): IUnifiedApp {
     addActions: (routes) => {
       for (const route of Object.values(routes)) {
 
-        if (route.path) {
-          route.path = '/' + joinPaths(...app.pathStack!, route.path);
-        }
-          
-        if (route.pathPrefix) {
-          route.pathPrefix = '/' + joinPaths(...app.pathStack!, route.pathPrefix);
+        if (!route.enforcePath) {
+          if (route.path) {
+            route.path = '/' + joinPaths(...app.pathStack!, route.path);
+          }
+          if (route.pathPrefix) {
+            route.pathPrefix = '/' + joinPaths(...app.pathStack!, route.pathPrefix);
+          }
         }
   
         app.actions!.push(route);

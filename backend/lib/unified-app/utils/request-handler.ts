@@ -1,3 +1,4 @@
+import { Config } from 'config';
 import { ResponseError } from 'unified-app';
 import { IUnifiedAction, IUnifiedActionContext, IUnifiedApp } from '../interfaces.d.ts';
 
@@ -17,6 +18,21 @@ export function makeRequestHandler(app: IUnifiedApp, actions: IUnifiedAction[]):
 
   return async (request, requestInfo) => {
     try {
+
+      if (Config.environment.mode === 'development') {
+        if (request.method === 'OPTIONS') {
+          return new Response('OK', {
+            status: 200,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': '*',
+              'Access-Control-Allow-Headers': '*',
+              'Access-Control-Allow-Credentials': 'true',
+            },
+          });
+        }
+      }
+
 
       /* find route */
   
@@ -110,38 +126,45 @@ export function makeRequestHandler(app: IUnifiedApp, actions: IUnifiedAction[]):
 
 
       /* return response */
-  
-      if (response instanceof Response) {
-        return response;
+
+      const returningResponse = (
+        response instanceof Response
+        ? response
+        : ['object', 'undefined', 'boolean', 'number'].includes(typeof response)
+          ? Response.json(response)
+          : new Response(String(response))
+      );
+
+      if (Config.environment.mode === 'development') {
+        returningResponse.headers.set('Access-Control-Allow-Origin', '*');
+        returningResponse.headers.set('Access-Control-Allow-Credentials', 'true');
+        returningResponse.headers.set('Access-Control-Allow-Headers', '*');
+        returningResponse.headers.set('Access-Control-Allow-Methods', '*');
       }
-  
-      if (typeof response === 'object' || typeof response === 'undefined' || typeof response === 'boolean' || typeof response === 'number') {
-        return Response.json(response);
-      }
-  
-      return new Response(String(response));
+
+      return returningResponse;
 
     }
     catch (error) {
+
+      const errorResponse = (error instanceof ResponseError
+        ? Response.json({ error: error.label }, { status: error.status })
+        : new Response((error as Error)?.message ?? 'an error occured', { status: 400 })
+      );
+
+      if (Config.environment.mode === 'development') {
+        errorResponse.headers.set('Access-Control-Allow-Origin', '*');
+        errorResponse.headers.set('Access-Control-Allow-Credentials', 'true');
+        errorResponse.headers.set('Access-Control-Allow-Headers', '*');
+        errorResponse.headers.set('Access-Control-Allow-Methods', '*');
+      }
+
       if (error instanceof ResponseError) {
-
         console.error(error.message);
-
-        return Response.json(
-          {
-            error: error.label,
-          },
-          {
-            status: error.status,
-          }
-        );
-
       }
-      else {
-        return new Response(error?.message ?? 'an error occured', {
-          status: 400,
-        });
-      }
+      
+      return errorResponse;
+
     }
   };
 

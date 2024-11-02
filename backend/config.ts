@@ -2,6 +2,9 @@ import { augmentConfiguration } from 'unified-deno-config';
 
 
 export const Config = augmentConfiguration({
+  environment: {
+    mode: 'development',
+  },
   http: {
     port: 8081,
   },
@@ -10,14 +13,14 @@ export const Config = augmentConfiguration({
   },
   media: {
     directory: 'media',
-    baseUrl: 'https://localhost:8080',
+    baseUrl: 'http://localhost:8081',
   },
   authentication: {
-    verificationTokenStaticCode: '1111',
-    verificationTokenLength: 4,
+    verificationTokenStaticCode: '111111',
+    verificationTokenLength: 6,
     verificationTokenLifetime: 1000 * 60 * 3,
     registrationTokenLifetime: 1000 * 60 * 3,
-    authenticationTokenUnits: 4,
+    authenticationTokenUnits: 6,
     authenticationTokenLifetime: 1000 * 60 * 60 * 24 * 30,
   },
   authorization: {

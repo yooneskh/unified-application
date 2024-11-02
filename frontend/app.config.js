@@ -6,8 +6,8 @@ export default {
     title: 'Unified Application',
   },
   http: {
-    baseUrl: 'https://uapp.khoshghadam.com',
-    apiUrl: 'https://uapp.khoshghadam.com/api',
+    baseUrl: 'http://localhost:8081',
+    apiUrl: 'http://localhost:8081/api',
   },
   locale: {
     default: 'en',

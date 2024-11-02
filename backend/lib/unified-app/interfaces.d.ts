@@ -16,6 +16,7 @@ export interface IUnifiedActionContext {
 export interface IUnifiedAction {
   method?: 'get' | 'post' | 'put' | 'patch' | 'delete';
   path?: string;
+  enforcePath?: boolean;
   handler?: (context: IUnifiedActionContext) => Promise<unknown> | unknown;
 }
 

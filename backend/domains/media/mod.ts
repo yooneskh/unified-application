@@ -3,6 +3,7 @@ import type { IUnifiedApp } from 'unified-app';
 import type { IUnifiedModel, IUnifiedController } from 'unified-resources';
 import type { IBaseDocument } from 'unified-kv';
 import { createUnifiedController } from 'unified-resources';
+import { ensureDir } from '@std/fs';
 
 
 interface IMediaBase {
@@ -125,37 +126,37 @@ export function install(app: IUnifiedApp) {
       path: '/media/upload',
       requirePermission: 'admin.media.upload',
       handler: async ({ body, user }) => {
-  
+
         const formData = body as FormData;
         const file = formData.get('file') as File;
-  
+
         if (!file) {
           throw new Error('file not provided');
         }
-  
+
         if (!( file.size > 0 )) {
           throw new Error('file is empty');
         }
-  
-  
+
+
         const name = file.name.slice(0, file.name.lastIndexOf('.'));
         const extension = file.name.slice(file.name.lastIndexOf('.') + 1);
         const size = file.size;
         const type = file.type;
-  
+
         if (!name) {
           throw new Error('invalid file name');
         }
-  
+
         if (!extension) {
           throw new Error('invalid file extension');
         }
-  
+
         if (!type) {
           throw new Error('invalid file type');
         }
-  
-  
+
+
         const mediaBase = await app.media.create({
           document: {
             owner: user!._id,
@@ -167,21 +168,15 @@ export function install(app: IUnifiedApp) {
             path: '--uploading--'
           },
         });
-  
-  
+
+
         try {
-  
-          try {
-            await Deno.mkdir(`../uploads/${Config.media.directory}`);
-          }
-          catch { /* directory exists */ }
-  
-  
+
           const relativeFilePath = `${Config.media.directory}/${mediaBase._id}.${extension}`;
           const fullPath = `${Config.media.baseUrl}/${relativeFilePath}`;
-  
+
           await Deno.writeFile(`../uploads/${relativeFilePath}`, file.stream(), { createNew: true })
-  
+
           return app.media.update({
             resourceId: mediaBase._id,
             payload: {
@@ -189,21 +184,21 @@ export function install(app: IUnifiedApp) {
               path: fullPath,
             },
           });
-  
+
         }
         catch (error: unknown) {
-  
+
           try {
-  
+
             const faultyMedia = await app.media.retrieve({
               resourceId: mediaBase._id,
             });
-  
+
             const deletePaths = [
               faultyMedia.relativePath,
               ...(Object.values(faultyMedia.variantRelatives ?? {}))
             ];
-  
+
             for (const deletePath of deletePaths) {
               try {
                 await Deno.remove(`./uploads/${deletePath}`);
@@ -212,20 +207,20 @@ export function install(app: IUnifiedApp) {
                 console.error(error);
               }
             }
-  
+
           }
           catch (error) {
             console.error(error);
           }
-  
+
           await app.media.delete({
             resourceId: mediaBase._id,
           });
-  
+
           throw error;
-  
+
         }
-  
+
       },
     },
   });
@@ -234,5 +229,23 @@ export function install(app: IUnifiedApp) {
   app.on('media.delete', async (media: IMedia) => {
     await Deno.remove(`../uploads/${Config.media.directory}/${media._id}.${media.extension}`);
   });
+
+  ensureDir(`../uploads/${Config.media.directory}`);
+
+
+  if (Config.environment.mode === 'development') {
+    app.addActions({
+      'serve-files': {
+        method: 'get',
+        path: '/media/:resourceId',
+        enforcePath: true,
+        handler: async ({ resourceId }) => {
+          return new Response(
+            (await Deno.open(`../uploads/${Config.media.directory}/${resourceId}`)).readable
+          );
+        },
+      },
+    });
+  }
 
 }
