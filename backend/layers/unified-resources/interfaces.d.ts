@@ -40,7 +40,7 @@ export type IUnifiedModel<T> = {
     /* meta */
     title?: string;
     titleable?: boolean;
-    items?: string[] | { value: string, title: string }[];
+    items?: string[] | { value: string; label: string; }[];
     itemValue?: string;
     itemText?: string;
     width?: number;

@@ -25,7 +25,6 @@ import ElementText from '../../unified-form-elements/elements/element-text.vue';
 import ElementTextarea from '../../unified-form-elements/elements/element-textarea.vue';
 import ElementSelect from '../../unified-form-elements/elements/element-select.vue';
 import ElementCheckbox from '../../unified-form-elements/elements/element-checkbox.vue';
-import ElementTagInput from '../../unified-form-elements/elements/element-tag-input.vue';
 import ElementDate from '../../unified-form-elements/elements/element-date.vue';
 import ElementMedia from '../../unified-form-elements/elements/element-media.vue';
 import ElementResource from '../../unified-form-elements/elements/element-resource.vue';
@@ -47,10 +46,6 @@ const elements = [
   {
     identifier: 'checkbox',
     component: markRaw(ElementCheckbox),
-  },
-  {
-    identifier: 'tag-input',
-    component: markRaw(ElementTagInput),
   },
   {
     identifier: 'date',
@@ -77,6 +72,13 @@ const transformers = [
       ...f,
       identifier: 'text',
       type: 'number',
+    }),
+  },
+  {
+    criterion: f => !f.label,
+    transducer: f => ({
+      ...f,
+      label: radTitle(f.key),
     }),
   },
 ];

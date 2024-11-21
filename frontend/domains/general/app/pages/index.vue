@@ -14,21 +14,20 @@ useHead({
 
 
 <template>
-  <main>
-    <content-container class=":uno: flex flex-col items-center justify-center gap-3 py-50">
+  <content-container class="fixed top-1/2 left-1/2 -translate-1/2 flex flex-col items-center justify-center gap-3">
 
-      <p>
-        Hello to Unified Components!
-      </p>
-  
-      <nuxt-link to="https://github.com/yooneskh" target="_blank">
-        <u-btn
-          icon="i-mdi-github"
-          label="Go To Github"
-          class="soft primary text-sm"
-        />
-      </nuxt-link>
+    <p>
+      Hello to Unified Components!
+    </p>
 
-    </content-container>
-  </main>
+    <u-button
+      variant="soft"
+      icon="i-mdi-github"
+      label="Open Github"
+      size="sm"
+      to="https://github.com/yooneskh"
+      target="_blank"
+    />
+
+  </content-container>
 </template>

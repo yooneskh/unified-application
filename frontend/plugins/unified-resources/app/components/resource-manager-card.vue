@@ -1,7 +1,6 @@
 <script setup>
 
 import pluralize from 'pluralize';
-import startCase from 'lodash/startCase';
 
 
 /* interface */
@@ -65,7 +64,7 @@ const tableActions = computed(() => {
     key: 'delete',
     icon: 'i-mdi-delete',
     label: 'Delete',
-    classes: 'danger',
+    color: 'error',
     handler: handleItemDelete,
   });
 
@@ -83,18 +82,17 @@ async function handleItemDelete(item) {
     icon: 'i-mdi-delete',
     title: `Delete ${props.resource}`,
     text: 'Are you sure you want to delete this?',
-    options: {
-      containerClasses: 'w-md',
-    },
     startButtons: [
       {
+        variant: 'soft',
         label: 'No, Cancel',
+        color: 'neutral',
       },
     ],
     endButtons: [
       {
         label: 'Yes, Delete this',
-        classes: 'danger',
+        color: 'error',
         async handler() {
 
           await ufetch(`/${resourceUrlPart.value}/${item._id}`, {
@@ -160,16 +158,16 @@ defineExpose({
       />
 
       <div class="text-xl font-bold">
-        {{ props.title ?? `Manage ${startCase(pluralize(props.resource))}` }}
+        {{ props.title ?? `Manage ${radTitle(pluralize(props.resource))}` }}
       </div>
 
       <div class="grow" />
 
-      <u-btn
+      <u-button
         icon="i-mdi-plus"
         label="Create New"
-        class="primary text-sm"
-        :click-handler="handleCreate"
+        loading-auto
+        @click="handleCreate()"
       />
 
     </div>

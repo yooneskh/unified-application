@@ -33,23 +33,24 @@ watch(() => captchaData.value?.captchaId, () => {
 <template>
   <div>
 
-    <u-input
-      label="Enter the number below"
-      inputmode="numeric"
-      v-model="captchaText"
-    />
+    <u-form-field label="Enter the number below">
+      <u-input
+        class="block"
+        inputmode="numeric"
+        v-model="captchaText"
+      />
+    </u-form-field>
 
-    <div class="flex items-center justify-center gap-1 mt-1">
+    <div class="flex items-center justify-center gap-1 mt-3">
 
-      <!-- <img
+      <img
         :src="captchaData?.captchaData"
-      /> -->
+        class="rounded"
+      />
 
-      <div v-html="captchaData?.captchaData" class="w-[150px] h-[50px]" />
-
-      <u-btn
+      <u-button
+        variant="ghost"
         icon="i-mdi-refresh"
-        class="ghost"
         tabindex="-1"
         @click="refresh();"
       />

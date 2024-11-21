@@ -31,19 +31,17 @@ const emit = defineEmits([
 
 /* breakpoints */
 
-import { useWindowSize } from '@vueuse/core';
 const { width: windowWidth } = useWindowSize();
 
-const breakpoints = {
-  'xs': 640,
-  'sm': 768,
-  'md': 1024,
-  'lg': 1280,
-  'xl': 1536,
-};
-
-
 const currentBreakpoint = computed(() => {
+
+  const breakpoints = {
+    'xs': 640,
+    'sm': 768,
+    'md': 1024,
+    'lg': 1280,
+    'xl': 1536,
+  };
 
   for (const key in breakpoints) {
     if (windowWidth.value < breakpoints[key]) {
@@ -93,7 +91,7 @@ const transformedFields = computed(() => {
 
   const result = [];
 
-  for (let i = 0; i < memoizedFields.value.length; i++) {
+  for (let i = 0; i < memoizedFields.value?.length; i++) {
 
     let field = memoizedFields.value[i];
 
@@ -312,7 +310,7 @@ const gap = computed(() =>
 
 
 <template>
-  <form class="unified-form" @submit.prevent>
+  <form @submit.prevent>
     <div
       v-for="(fieldRow, index) of rowedFields" :key="index"
       class="row">

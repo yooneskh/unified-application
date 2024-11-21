@@ -18,22 +18,13 @@ const modelValue = defineModel();
 
 
 <template>
-  <u-textarea
-    :label="props.field.label"
-    :placeholder="props.field.placeholder"
-    :type="props.field.type"
-    :rows="props.field.rows"
-    :icon="props.field.icon"
-    :inner-icon="props.field.innerIcon"
-    :append-icon="props.field.appendIcon"
-    :inner-append-icon="props.field.innerAppendIcon"
-    :input-classes="props.field.inputClasses"
-    :message="props.field.message"
-    :loading="props.field.loading"
-    :readonly="props.field.readonly"
-    :disabled="props.field.disabled"
-    v-model="modelValue"
-    :error="props.error ? props.messages?.join(' - ') : undefined"
-    :success="props.success ? props.messages?.join(' - ') : undefined"
-  />
+  <u-form-field
+    v-bind="radPick(props.field, ['label', 'description', 'hint', 'help', 'size'])"
+    :error="props.error ? props.messages?.join(' - ') : undefined">
+    <u-textarea
+      v-bind="radOmit(props.field, ['key', 'identifier', 'label', 'description', 'hint', 'help', 'size'])"
+      class="block"
+      v-model="modelValue"
+    />
+  </u-form-field>
 </template>

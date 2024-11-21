@@ -1,18 +1,19 @@
-import ButtonPickerDialog from '../button-picker/dialog.vue';
 
 
-export async function launchButtonPickerDialog({ icon, title, subtitle, text, classes, startButtons, endButtons, options }) {
+export async function launchButtonPickerDialog({ icon, title, description, text, classes, startButtons, endButtons, options }) {
   return launchDialog({
-    component: ButtonPickerDialog,
+    component: defineAsyncComponent({ loader: () => import('../button-picker/dialog.vue') }),
     props: {
-      icon,
-      title,
-      subtitle,
       text,
       classes,
       startButtons,
       endButtons,
     },
-    options,
+    options: {
+      icon,
+      title,
+      description,
+      ...(options || {}),
+    },
   });
 }

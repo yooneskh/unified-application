@@ -11,42 +11,16 @@ const props = defineProps({
 
 const modelValue = defineModel();
 
-
-/* model */
-
-const proxy = computed({
-  get: () => {
-
-    if (!modelValue.value) {
-      return false;
-    }
-
-    return true;
-
-  },
-  set: v => {
-    modelValue.value = v;
-  },
-});
-
-
-/* template */
-
 </script>
 
 
 <template>
-  <u-checkbox
-    :label="props.field.label"
-    :icon="props.field.icon"
-    :color="props.field.color"
-    :disabled="props.field.disabled"
-    :unchecked-value="props.field.uncheckedValue"
-    :checked-value="props.field.checkedValue"
-    :message="props.field.message"
-    class="mt-8"
-    v-model="proxy"
-    :error="props.error ? props.messages?.join(' - ') : undefined"
-    :success="props.success ? props.messages?.join(' - ') : undefined"
-  />
+  <u-form-field
+    v-bind="radPick(props.field, ['hint', 'help', 'fieldLabel'])"
+    :error="props.error ? props.messages?.join(' - ') : undefined">
+    <u-checkbox
+      v-bind="radOmit(props.field, ['key', 'identifier', 'hint', 'help', 'fieldLabel'])"
+      v-model="modelValue"
+    />
+  </u-form-field>
 </template>

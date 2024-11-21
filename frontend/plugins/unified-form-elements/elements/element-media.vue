@@ -29,6 +29,11 @@ async function openMediaSelector() {
 
   const result = await launchDialog({
     component: MediaGallery,
+    options: {
+      title: 'Media Gallery',
+      description: 'Select media from your gallery.',
+      class: '!max-w-5xl',
+    }
   });
 
   if (!result) {
@@ -66,25 +71,7 @@ watch(modelValue, async () => {
 
 
 <template>
-  <u-input
-    v-bind="$attrs"
-    :label="props.field.label"
-    :placeholder="props.field.placeholder"
-    :icon="props.field.icon"
-    :inner-icon="props.field.innerIcon  || 'i-mdi-file'"
-    :append-icon="props.field.appendIcon"
-    :inner-append-icon="props.field.InnerAppendIcon"
-    :input-classes="props.field.inputClasses"
-    :message="props.field.message"
-    :loading="props.field.loading || loading"
-    :readonly="props.field.readonly"
-    :disabled="props.field.disabled"
-    @click.self="openMediaSelector()"
-    :model-value="fieldText"
-    :error="props.error ? props.messages?.join(' - ') : undefined"
-    :success="props.success ? props.messages?.join(' - ') : undefined">
-
-    <template #append>
+  <!-- <template #append>
       <nuxt-link
         v-if="mediaObject && mediaObject.type?.startsWith('image')"
         :href="mediaObject.path"
@@ -110,11 +97,18 @@ watch(modelValue, async () => {
         </u-dropdown>
   
       </nuxt-link>
-    </template>
-
-    <template #append-inner>
-      <slot name="append-inner" />
-    </template>
-
-  </u-input>
+    </template> -->
+  <u-form-field
+    v-bind="radPick(props.field, ['label', 'description', 'hint', 'help', 'size'])"
+    :error="props.error ? props.messages?.join(' - ') : undefined">
+    <u-input
+      icon="i-mdi-file"
+      v-bind="radOmit(props.field, ['key', 'identifier', 'label', 'description', 'hint', 'help', 'size'])"
+      class="block"
+      :loading="props.field.loading || loading"
+      readonly
+      :model-value="fieldText"
+      @click="openMediaSelector()"
+    />
+  </u-form-field>
 </template>

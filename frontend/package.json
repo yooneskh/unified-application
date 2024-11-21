@@ -11,12 +11,15 @@
   },
   "dependencies": {
     "@formkit/tempo": "0.1.2",
-    "nuxt": "3.13.2",
+    "@nuxt/ui": "3.0.0-alpha.8",
+    "@vueuse/core": "11.2.0",
+    "@vueuse/nuxt": "11.2.0",
+    "nuxt": "3.14.1592",
+    "nuxt-radash": "1.0.0",
     "nuxt-unified-confetti": "0.1.1",
     "pluralize": "8.0.0",
-    "unified-components": "0.6.18",
     "unified-mongo-filter": "0.3.1",
-    "vue": "3.5.12",
+    "vue": "3.5.13",
     "vue3-persian-datetime-picker": "1.2.2"
   }
 }

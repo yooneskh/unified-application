@@ -1,8 +1,5 @@
 <script setup>
 
-import startCase from 'lodash/startCase';
-
-
 /* interface */
 
 const props = defineProps({
@@ -25,47 +22,29 @@ const emit = defineEmits([
 
 ]);
 
-
-/* actions */
-
-const actionsLoading = reactive({});
-
-async function handleActionClick(action, item, index) {
-
-  actionsLoading[`${item[props.itemKey]}-${action.key}`] = true;
-
-  try {
-    await action.handler?.(item, index);
-  }
-  catch {}
-
-  actionsLoading[`${item[props.itemKey]}-${action.key}`] = false;
-
-}
-
 </script>
 
 
 <template>
-  <div class="w-full overflow-x-auto border">
+  <div class="w-full overflow-x-auto border border-[var(--ui-border)] rounded-[var(--ui-radius)] overflow-clip">
     <table class="w-full">
   
-      <thead class="border-b">
+      <thead class="border-b border-[var(--ui-border)]">
         <tr>
   
           <th v-for="header of props.headers" :key="header.key">
             <slot name="header" :header="header">
-              <div class="text-start p-2 whitespace-nowrap">
-                <slot name="header-name" :header="header" :label="startCase(header.key)">
+              <div class="text-sm text-start px-2 py-1 whitespace-nowrap">
+                <slot name="header-name" :header="header" :label="radTitle(header.key)">
                   <span :class="header.headerClasses">
-                    {{ header.label || startCase(header.key) }}
+                    {{ header.label || radTitle(header.key) }}
                   </span>
                 </slot>
               </div>
             </slot>
           </th>
   
-          <th v-if="props.actions?.length > 0" class="text-center p-2">
+          <th v-if="props.actions?.length > 0" class="text-sm text-center p-2">
             {{ props.actionsTitle }}
           </th>
   
@@ -80,7 +59,7 @@ async function handleActionClick(action, item, index) {
         </tr>
         <tr
           v-for="row of props.items" :key="row[props.itemKey]"
-          class="transition hover:bg-black/10"
+          class="transition hover:bg-[var(--ui-text)]/10 odd:bg-[var(--ui-text)]/5"
           :class="{
             'bg-primary/15': props.selectedItems?.includes(row[props.itemKey]),
             'cursor-pointer': !!props.rowAction,
@@ -89,7 +68,7 @@ async function handleActionClick(action, item, index) {
   
           <td
             v-for="header of props.headers" :key="header.key"
-            class="text-start p-2">
+            class="text-start px-2 py-1">
   
             <slot name="item" :header="header" :item="row" :data="row[header.key]">
               <slot :name="`item-${header.key}`" :item="row" :data="row[header.key]">
@@ -104,28 +83,21 @@ async function handleActionClick(action, item, index) {
           <td v-if="props.actions?.length > 0">
             <div class="flex items-center justify-center gap-1 px-2">
               <div v-for="(action, index) of props.actions" :key="action.key">
-              
-                <u-btn
-                  :icon="action.icon"
-                  class="ghost hidden md:inline-flex whitespace-nowrap"
-                  :class="action.classes"
-                  :loading="actionsLoading[`${row[props.itemKey]}-${action.key}`]"
-                  @click.stop="handleActionClick(action, row, index)"
-                />
-                <u-btn
-                  :label="action.label"
-                  :icon="action.icon"
-                  class="ghost md:hidden whitespace-nowrap"
-                  :class="action.classes"
-                  :loading="actionsLoading[`${row[props.itemKey]}-${action.key}`]"
-                  @click.stop="handleActionClick(action, row, index)"
-                />
-    
-                <u-tooltip
-                  :text="action.label"
-                  class="md:block"
-                />
-  
+                <u-tooltip :text="action.label">
+                  <u-button
+                    variant="ghost"
+                    :icon="action.icon"
+                    :color="action.color"
+                    size="xs"
+                    class="whitespace-nowrap"
+                    :class="action.classes"
+                    loading-auto
+                    @click.stop="action.handler?.(row, index)">
+                    <span class="md:hidden">
+                      {{ action.label }}
+                    </span>
+                  </u-button>
+                </u-tooltip>
               </div>
             </div>
           </td>

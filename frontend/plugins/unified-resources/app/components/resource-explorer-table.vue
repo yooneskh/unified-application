@@ -41,7 +41,7 @@ const headers = computed(() =>
 
 /* items */
 
-const itemsInPage = ref(10);
+const itemsInPage = ref(15);
 const currentPage = ref(1);
 
 const filters = ref({});
@@ -125,7 +125,7 @@ import ExplorerTableFilterItem from '../atoms/explorer-table-filter-item.vue';
 <template>
   <div>
 
-    <u-table
+    <y-table
       :headers="headers"
       :items="items"
       :selected-items="props.selectedResources"
@@ -133,32 +133,34 @@ import ExplorerTableFilterItem from '../atoms/explorer-table-filter-item.vue';
 
       <template #header-name="{ header, label }">
 
-        <div class="flex items-center gap-1">
+        <div class="flex items-center">
 
-          {{ label }}
+          <span class="me-2">
+            {{ label }}
+          </span>
 
-          <u-btn
+          <u-button
+            variant="ghost"
             :icon="sorts[header.key] === undefined ? 'i-mdi-arrow-up-down' : (sorts[header.key] === -1 ? 'i-mdi-arrow-down' : 'i-mdi-arrow-up')"
-            class="ghost text-xs p-[2px] -mt-1"
+            color="neutral"
+            size="xs"
             @click="sorts = { [header.key]: sorts[header.key] === undefined ? -1 : (sorts[header.key] === -1 ? 1 : undefined) }"
           />
 
-          <u-btn
-            icon="i-mdi-filter"
-            class="ghost text-xs p-[2px] -mt-1"
-            :class="{
-              'primary': filters[header.key],
-            }">
-            <u-dropdown persist="content">
-              <u-card>
-                <explorer-table-filter-item
-                  class="font-normal"
-                  :header="header"
-                  v-model="filters[header.key]"
-                />
-              </u-card>
-            </u-dropdown>
-          </u-btn>
+          <u-popover v-if="!['createdAt', 'updatedAt'].includes(header.key)">
+            <u-button
+              variant="ghost"
+              icon="i-mdi-filter"
+              :color="filters[header.key] ? 'primary' : 'neutral'"
+              size="xs"
+            />
+            <template #content>
+              <explorer-table-filter-item
+                :header="header"
+                v-model="filters[header.key]"
+              />
+            </template>
+          </u-popover>
 
         </div>
 
@@ -172,35 +174,20 @@ import ExplorerTableFilterItem from '../atoms/explorer-table-filter-item.vue';
         />
       </template>
 
-    </u-table>
+    </y-table>
 
-    <div class="py-3 flex items-center">
-
-      <div class="flex gap-1">
-        <u-btn
-          v-for="index of totalPages"
-          :label="String(index)"
-          class="soft aspect-1 text-sm"
-          :class="{
-            'primary': currentPage === index,
-          }"
-          @click="currentPage = index"
-        />
-      </div>
-
-      <div class="grow" />
-
-      <div class="text-sm">
-        Items to show
-      </div>
-
+    <div class="py-3 flex justify-between">
+      <u-pagination
+        size="sm"
+        :total="itemsCount"
+        :items-per-page="itemsInPage"
+        v-model:page="currentPage"
+      />
       <u-select
         :items="[ 5, 10, 15, 30 ]"
-        class="ms-3 w-[100px]"
         v-model="itemsInPage"
         @update:model-value="currentPage = 1;"
       />
-
     </div>
 
   </div>

@@ -32,7 +32,7 @@ const query = ref('');
 const selectedExtension = ref(undefined);
 
 const queriedMediaList = computed(() =>
-  mediaList.value.filter(it =>
+  mediaList.value?.filter(it =>
     ([it.name, it.extension].join(' ').toLowerCase().includes(query.value.toLowerCase())) &&
     (!selectedExtension.value || (it.extension === selectedExtension.value))
   )
@@ -121,7 +121,7 @@ async function deleteFile(media) {
     startButtons: [
       {
         label: 'Delete Media',
-        classes: 'danger',
+        color: 'error',
         handler: async () => {
 
           await ufetch(`/media/${media._id}`, {
@@ -136,6 +136,7 @@ async function deleteFile(media) {
     endButtons: [
       {
         label: 'No, Do not delete',
+        color: 'neutral',
       },
     ],
   });
@@ -151,7 +152,7 @@ async function deleteAllCurrentMediaList() {
     startButtons: [
       {
         label: 'Delete All Current Media List',
-        classes: 'danger',
+        color: 'error',
         handler: async () => {
           for (const item of queriedMediaList.value) {
 
@@ -168,6 +169,7 @@ async function deleteAllCurrentMediaList() {
     endButtons: [
       {
         label: 'No, Do not delete',
+        color: 'neutral',
       },
     ],
   });
@@ -177,14 +179,23 @@ async function deleteAllCurrentMediaList() {
 
 
 <template>
-  <u-card
-    icon="i-mdi-view-gallery-outline"
-    title="Media Gallery"
-    subtitle="Select media from gallery"
-    class="w-5xl max-w-full">
+  <div>
 
-    <template #append>
-      <div class="flex items-center gap-1">
+    <div class="flex items-start gap-2">
+
+      <u-input
+        placeholder="Search"
+        v-model="query"
+      />
+
+      <u-select
+        v-if="allExtensions?.length > 0"
+        placeholder="Filter File Type"
+        :items="allExtensions.map(it => ({ label: it, value: it }))"
+        v-model="selectedExtension"
+      />
+
+      <div class="flex items-center gap-1 ms-auto">
 
         <template v-if="loading">
           <span class="text-xs font-mono opacity-50 me-4">
@@ -192,32 +203,35 @@ async function deleteAllCurrentMediaList() {
             <span class="whitespace-pre">%{{ progress?.toFixed(0).padEnd(3) }}</span>
           </span>
         </template>
-  
-        <u-btn
+
+        <u-button
           icon="i-mdi-upload"
           label="Upload new media"
-          class="primary text-sm"
           :loading="loading || pending"
           @click="elFile.click()"
         />
-  
-        <u-btn
-          icon="i-mdi-dots-vertical"
-          class="soft">
-          <u-dropdown>
-            <u-card class="fill neutral p-2">
-              <p class="text-sm mb-1">
-                Hazardous actions
-              </p>
-              <u-btn
-                icon="i-mdi-trash-can"
-                label="Delete all current media list"
-                class="soft danger text-sm"
-                :click-handler="deleteAllCurrentMediaList"
-              />
-            </u-card>
-          </u-dropdown>
-        </u-btn>
+
+        <u-dropdown-menu
+          :items="[
+            {
+              type: 'label',
+              label: 'Dangerous actions'
+            },
+            {
+              label: 'Delete all current media list',
+              icon: 'i-mdi-delete-alert',
+              color: 'error',
+              disabled: !(queriedMediaList?.length > 0),
+              onSelect: deleteAllCurrentMediaList,
+            },
+          ]"
+          >
+          <u-button
+            variant="soft"
+            icon="i-mdi-dots-vertical"
+          />
+        </u-dropdown-menu>
+
       </div>
 
       <input
@@ -229,73 +243,66 @@ async function deleteAllCurrentMediaList() {
         @change="handleFilesSelected($event?.target.files)"
       />
 
-    </template>
-
-    <div class="my-3 flex items-start gap-4">
-      <div>
-        <u-input
-          placeholder="Search"
-          v-model="query"
-        />
-      </div>
-      <div>
-        <u-select
-          placeholder="Filter File Type"
-          :items="[
-            { title: 'None', value: '' },
-            ...allExtensions.map(it => ({ title: it, value: it })),
-          ]"
-          v-model="selectedExtension"
-        />
-      </div>
     </div>
 
-    <div v-if="pending && !(mediaList?.length > 0)" class="p-6 text-center">
-      <u-spinner
-        class="w-[24px]"
-      />
+    <div v-if="pending && !(mediaList?.length > 0)" class="p-6 text-xs text-center">
+      Loading ...
     </div>
-    <div v-else-if="!pending && mediaList.length === 0" class="text-sm text-center p-3">
+    <div v-else-if="!pending && mediaList.length === 0" class="p-3 text-xs text-center">
       You have not uploaded any media yet.
     </div>
 
-    <div v-else class="grid grid-cols-3 md:grid-cols-9 gap-1">
+    <div v-else class="grid grid-cols-3 md:grid-cols-9 gap-1 mt-3">
       <div
         v-for="item of queriedMediaList" :key="item._id"
         class="relative cursor-pointer interactive"
         @click="emit('resolve', item._id)">
+        <u-popover mode="hover" :open-delay="0">
 
-        <img
-          :src="item.path"
-          class="w-full aspect-square object-cover"
-        />
-
-        <p class="absolute bottom-1 left-1 right-1 bg-black p-1 text-xs text-white whitespace-nowrap overflow-hidden text-ellipsis">
-          {{ item.name }}.{{ item.extension }}
-        </p>
-
-        <u-tooltip class="text-sm">
-          <p>
-            {{ item.name }}.{{ item.extension }}
-          </p>
-          <p>
-            {{ (item.size / 1024 / 1024).toFixed(2) }} MB
-          </p>
-          <p>
-            {{ formatDate(item.createdAt) }}
-          </p>
-          <div class="space-x-1 mb-1 mt-2">
-            <u-btn
-              icon="i-mdi-trash-can"
-              class="danger text-xs"
-              @click="deleteFile(item)"
+          <div class="w-full aspect-square">
+            <img
+              v-if="item.type?.startsWith('image')"
+              :src="item.path"
+              class="w-full aspect-square object-cover rounded"
             />
+            <u-icon
+              v-else
+              name="i-mdi-file-outline"
+              size="64"
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-4/6"
+            />
+            <p class="absolute bottom-0 left-0 right-0 bg-black p-1 text-xs text-white whitespace-nowrap overflow-hidden text-ellipsis rounded-b">
+              {{ item.name }}.{{ item.extension }}
+            </p>
           </div>
-        </u-tooltip>
+
+          <template #content>
+            <div class="p-2 text-sm">
+              <p>
+                {{ item.name }}.{{ item.extension }}
+              </p>
+              <p>
+                {{ (item.size / 1024 / 1024).toFixed(2) }} MB
+              </p>
+              <p>
+                {{ formatDate(item.createdAt) }}
+              </p>
+              <div class="space-x-1 mt-2">
+                <u-button
+                  icon="i-mdi-trash-can"
+                  color="error"
+                  size="xs"
+                  loading-auto
+                  @click="deleteFile(item)"
+                />
+              </div>
+            </div>
+          </template>
+
+        </u-popover>
 
       </div>
-
     </div>
 
-  </u-card>
+  </div>
 </template>

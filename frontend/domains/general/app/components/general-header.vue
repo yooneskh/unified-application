@@ -15,9 +15,9 @@ async function logoutUser() {
 
 
 <template>
-  <header class="border-b-1">
+  <header>
 
-    <content-container class="flex items-center py-2 gap-1">
+    <content-container class="flex items-center py-3 gap-1">
 
       <nuxt-link class="text-lg" :to="{ name: 'general.home' }">
         {{ config.brand.title }}
@@ -26,39 +26,39 @@ async function logoutUser() {
       <div class="grow" />
 
       <template v-if="user">
-        <u-btn
-          icon="i-mdi-account-outline"
-          class="ghost">
-          <u-dropdown>
-            <u-card class="p-1 flex flex-col gap-1 w-xs">
-              <p class="text-sm text-center mb-1">
-                {{ user.email }}
-              </p>
-              <hr />
-              <nuxt-link v-if="user?.permissions?.some(it => it.startsWith('admin'))" :to="{ name: 'admin.dashboard' }">
-                <u-btn
-                  icon="i-mdi-view-dashboard"
-                  label="Admin dashboard"
-                  class="ghost text-sm w-full"
-                />
-              </nuxt-link>
-              <u-btn
-                icon="i-mdi-logout"
-                label="Logout"
-                class="soft danger text-sm"
-                :click-handler="logoutUser"
-              />
-            </u-card>
-          </u-dropdown>
-        </u-btn>
+        <u-dropdown-menu
+          :items="[
+            {
+              type: 'label',
+              label: user.email,
+            },
+            {
+              class: !user.permissions?.some(it => it.startsWith('admin')) ? 'hidden' : undefined,
+              icon: 'i-mdi-view-dashboard',
+              label: 'Admin dashboard',
+              to: { name: 'admin.dashboard' },
+            },
+            {
+              icon: 'i-mdi-logout',
+              color: 'error',
+              label: 'Logout',
+              onSelect: logoutUser,
+            },
+          ]">
+          <u-button
+            variant="ghost"
+            icon="i-mdi-account-outline"
+            color="neutral"
+          />
+        </u-dropdown-menu>
       </template>
       <template v-else>
-        <nuxt-link :to="{ name: 'authentication' }">
-          <u-btn
-            label="Login"
-            class="soft text-sm"
-          />
-        </nuxt-link>
+        <u-button
+          variant="soft"
+          label="Login"
+          size="sm"
+          :to="{ name: 'authentication' }"
+        />
       </template>
 
     </content-container>

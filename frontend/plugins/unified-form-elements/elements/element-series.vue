@@ -47,18 +47,15 @@ function handleMoveItem(item, index, direction) {
 
 }
 
-
-/* template */
-
 </script>
 
 
 <template>
-  <div class="form-element-series border">
+  <div class="ring ring-inset ring-[var(--ui-border-accented)] rounded-[calc(var(--ui-radius))]">
 
-    <p class="text-sm flex items-center gap-3 py-2 px-3 border-b">
+    <label class="text-sm font-medium text-[var(--ui-text)] flex items-center gap-2 py-2 px-3 border-b border-[var(--ui-border-accented)]">
 
-      <span class="font-bold">
+      <span>
         {{ props.field.label }}
       </span>
 
@@ -66,17 +63,18 @@ function handleMoveItem(item, index, direction) {
         ({{ (modelValue?.length > 0) ? (`${modelValue.length} items`) : ('No items') }})
       </span>
 
-      <u-btn
+      <u-button
+        variant="soft"
         icon="i-mdi-plus"
-        label="Item"
-        class="soft primary text-xs py-1"
+        label="New item"
+        size="xs"
         @click="handleAddItem()"
       />
 
-    </p>
+    </label>
 
     <template v-if="!modelValue || !(modelValue.length > 0)">
-      <p class="text-sm text-center py-4">
+      <p class="text-xs text-center py-6">
         No Items
       </p>
     </template>
@@ -89,43 +87,52 @@ function handleMoveItem(item, index, direction) {
         'grid-cols-2': props.field.seriesColumns === 2,
         'grid-cols-3': props.field.seriesColumns === 3,
         'grid-cols-4': props.field.seriesColumns === 4,
+        'grid-cols-5': props.field.seriesColumns === 5,
+        'grid-cols-6': props.field.seriesColumns === 6,
       }">
       <div
         v-for="(item, index) of modelValue" :key="index"
-        :cols="props.field.itemWidth || 12"
-        class="relative">
+        class="relative group">
 
         <u-form
           :target="item"
           :fields="props.field.itemFields"
-          class="border p-2"
+          class="p-3 ring ring-inset ring-[var(--ui-border-accented)] rounded-[calc(var(--ui-radius))]"
         />
 
-        <div class="series-item-actions flex gap-1">
+        <div class="absolute top-2 end-2 opacity-0 pointer-events-none transition-all group-hover:opacity-100 group-hover:pointer-events-auto flex gap-1">
 
-          <u-btn
+          <u-button
+            variant="soft"
             icon="i-mdi-content-copy"
-            class="soft text-xs aspect-1 p-1"
+            color="neutral"
+            size="xs"
             @click="handleDuplicateItem(item, index)"
           />
 
-          <u-btn
+          <u-button
             v-if="index > 0"
+            variant="soft"
             icon="i-mdi-chevron-left"
-            class="soft text-xs aspect-1 p-1"
+            color="neutral"
+            size="xs"
             @click="handleMoveItem(item, index, -1)"
           />
 
-          <u-btn
+          <u-button
             v-if="index < modelValue.length - 1"
+            variant="soft"
             icon="i-mdi-chevron-right"
-            class="soft text-xs aspect-1 p-1"
+            color="neutral"
+            size="xs"
             @click="handleMoveItem(item, index, 1)"
           />
 
-          <u-btn
-            icon="i-mdi-close"
-            class="soft danger text-xs aspect-1 p-1"
+          <u-button
+            variant="soft"
+            icon="i-mdi-delete"
+            color="error"
+            size="xs"
             @click="handleDeleteItem(item, index)"
           />
 
@@ -136,27 +143,3 @@ function handleMoveItem(item, index, direction) {
 
   </div>
 </template>
-
-
-<style scoped>
-
-  .series-item-actions {
-
-    position: absolute;
-
-    top: 8px;
-    inset-inline-end: 8px;
-
-    opacity: 0;
-    pointer-events: none;
-
-    transition: all 300ms ease-in-out;
-
-  }
-
-  div:hover > .series-item-actions {
-    opacity: 1;
-    pointer-events: unset;
-  }
-
-</style>

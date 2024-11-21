@@ -12,6 +12,9 @@ export default defineNuxtConfig({
     server: false,
     client: process.env.NODE_ENV === 'development',
   },
+  css: [
+    './assets/css/unified-base.css',
+  ],
   extends: [
     '../unified-resources',
     '../unified-dialogs-common',
@@ -19,7 +22,15 @@ export default defineNuxtConfig({
     '../unified-toasts',
     '../unified-forms',
     '../unified-network',
-    'unified-components',
     'nuxt-unified-confetti',
   ],
+  modules: [
+    '@nuxt/ui',
+    '@vueuse/nuxt',
+    'nuxt-radash',
+  ],
+  radash: {
+    prefix: 'rad',
+    prefixSkip: false,
+  },
 });

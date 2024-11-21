@@ -42,19 +42,6 @@ import ExplorerTableCellResource from './explorer-table-cell-resource.vue';
 
 <template>
 
-  <template v-if="props.header.variants">
-    <template v-for="(headerExtra, variant) of props.header.variants" :key="variant">
-      <span class="whitespace-nowrap text-sm underline m-1">
-        {{ variant }}:
-        <explorer-table-cell
-          v-if="props.data[variant]"
-          :header="{ ...props.header, ...(headerExtra || {}), variants: undefined }"
-          :data="props.data[variant]"
-        />
-      </span>
-    </template>
-  </template>
-
   <template v-if="props.header.type === 'series'">
     <span class="whitespace-nowrap text-sm underline text-primary cursor-pointer" @click="viewSeriesData()">
       View Data
@@ -87,11 +74,14 @@ import ExplorerTableCellResource from './explorer-table-cell-resource.vue';
   </template>
 
   <template v-else-if="props.header.type === 'boolean'">
-    <template v-if="data">
-      <u-icon name="i-mdi-check" class="text-sm text-success" />
+    <template v-if="data === true">
+      <u-icon name="i-mdi-check" class="text-green-500" />
+    </template>
+    <template v-else-if="data === false">
+      <u-icon name="i-mdi-close" class="text-red-500" />
     </template>
     <template v-else>
-      <u-icon name="i-mdi-close" class="text-sm text-danger" />
+      <u-icon name="i-mdi-help" class="text-neutral-500" />
     </template>
   </template>
 

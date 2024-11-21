@@ -15,21 +15,20 @@ definePageMeta({
 /* resource */
 
 import { singular } from 'pluralize';
-import startCase from 'lodash/startCase';
 
 const resourceIdentifier = computed(() =>
   route.params.resourceIdentifier
 );
 
 const resourceModel = computed(() =>
-  startCase(singular(resourceIdentifier.value)).replaceAll(' ', '')
+  radTitle(singular(resourceIdentifier.value)).replaceAll(' ', '')
 );
 
 
 /* seo */
 
 useHead({
-  title: resourceModel,
+  title: computed(() => radTitle(resourceIdentifier.value)),
 });
 
 </script>

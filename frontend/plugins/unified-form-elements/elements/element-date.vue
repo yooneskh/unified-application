@@ -80,6 +80,17 @@ function handleDateChange(newDate) {
 }
 
 
+/* props */
+
+const formFieldProps = computed(() =>
+  radPick(props.field, ['label', 'description', 'hint', 'help', 'size'])
+);
+
+const inputProps = computed(() =>
+  radOmit(props.field, ['key', 'identifier', 'label', 'description', 'hint', 'help', 'size', 'dateType'])
+);
+
+
 /* template */
 
 const DatePicker = defineAsyncComponent(() =>
@@ -92,53 +103,36 @@ const DatePicker = defineAsyncComponent(() =>
 <template>
   <div>
 
-    <u-input
-      :label="props.field.label"
-      :placeholder="props.field.placeholder"
-      :icon="props.field.icon"
-      :inner-icon="props.field.innerIcon"
-      :append-icon="props.field.appendIcon"
-      :inner-append-icon="props.field.innerAppendIcon"
-      :label-classes="props.field.labelClasses"
-      :container-classes="props.field.containerClasses"
-      :input-classes="props.field.inputClasses"
-      :message="props.field.message"
-      :loading="props.field.loading"
-      :readonly="props.field.readonly"
-      :disabled="props.field.disabled"
-      :model-value="fieldTitle"
-      :error="props.error ? props.messages?.join(' - ') : undefined"
-      :success="props.success ? props.messages?.join(' - ') : undefined"
-    />
-
-    <u-dropdown persist="content" class="w-[512px]" v-model="isOpened">
-      <div class="shadow-lg border overflow-hidden">
-        <date-picker
-          format="YYYY/MM/DD HH:mm"
-          :type="props.field.dateType"
-          locale="en"
-          inline
-          class="[&>.vpd-input-group]:hidden vpd-datepicker-form-element"
-          :modelValue="fieldValue"
-          @update:model-value="handleDateChange($event); isOpened = false;"
+    <u-popover v-model:open="isOpened">
+      <u-form-field
+        v-bind="formFieldProps"
+        :error="props.error ? props.messages?.join(' - ') : undefined">
+        <u-input
+          v-bind="inputProps"
+          class="block"
+          readonly
+          :model-value="fieldTitle"
         />
-      </div>
-    </u-dropdown>
+      </u-form-field>
+      <template #content>
+        <div class="text-black">
+          <date-picker
+            format="YYYY/MM/DD HH:mm"
+            :type="props.field.dateType"
+            locale="en"
+            inline
+            class="
+              [&>.vpd-input-group]:!hidden vpd-datepicker-form-element
+              [&_.vpd-next]:flex [&_.vpd-next]:items-center [&_.vpd-next]:justify-center
+              [&_.vpd-prev]:flex [&_.vpd-prev]:items-center [&_.vpd-prev]:justify-center
+              [&_.vpd-time-column_svg]:m-auto
+            "
+            :modelValue="fieldValue"
+            @update:model-value="handleDateChange($event); isOpened = false;"
+          />
+        </div>
+      </template>
+    </u-popover>
 
   </div>
 </template>
-
-
-<style scoped>
-
-  .vpd-datepicker-form-element :deep(.vpd-next), .vpd-datepicker-form-element :deep(.vpd-prev) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .vpd-datepicker-form-element :deep(.vpd-time-column svg) {
-    margin: auto;
-  }
-
-</style>

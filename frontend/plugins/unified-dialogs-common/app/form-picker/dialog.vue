@@ -1,9 +1,6 @@
 <script setup>
 
 const props = defineProps({
-  icon: String,
-  title: String,
-  subtitle: String,
   text: String,
   classes: String,
   fields: Array,
@@ -33,9 +30,7 @@ async function handleSubmit() {
     await props.handler?.(form);
     emit('resolve', form);
   }
-  catch {
-
-  }
+  catch { }
 
 }
 
@@ -43,35 +38,33 @@ async function handleSubmit() {
 
 
 <template>
-  <u-card
-    :icon="props.icon"
-    :title="props.title"
-    :subtitle="props.subtitle"
-    :text="props.text"
-    :class="props.classes">
+  <div :class="props.classes">
 
-    <u-form
-      :target="form"
-      :fields="props.fields"
-      class="mt-3"
-    />
+    <p v-if="props.text">
+      {{ props.text }}
+    </p>
+
+    <pre>{{ props.fields }}</pre>
 
     <div class="flex gap-2 mt-4">
 
-      <u-btn
+      <u-button
         :label="props.submitLabel || 'Submit'"
-        class="primary"
-        :click-handler="handleSubmit"
+        loading-auto
+        @click="handleSubmit()"
       />
       
       <div class="grow" />
 
-      <u-btn
+      <u-button
+        variant="soft"
+        color="neutral"
         :label="props.cancelLabel || 'Cancel'"
+        loading-auto
         @click="emit('resolve')"
       />
 
     </div>
 
-  </u-card>
+  </div>
 </template>
