@@ -1,6 +1,9 @@
 <script setup>
 
 const props = defineProps({
+  icon: String,
+  title: String,
+  description: String,
   text: String,
   classes: String,
   fields: Array,
@@ -38,33 +41,49 @@ async function handleSubmit() {
 
 
 <template>
-  <div :class="props.classes">
+  <u-card :class="props.classes">
 
-    <p v-if="props.text">
+    <template #header>
+      <un-typography
+        :icon="props.icon"
+        :title="props.title"
+        :description="props.description">
+        <template #append>
+          <u-button
+            variant="ghost"
+            color="neutral"
+            icon="i-mdi-close"
+            @click="emit('resolve')"
+          />
+        </template>
+      </un-typography>
+    </template>
+
+    <p v-if="props.text" class="mb-3">
       {{ props.text }}
     </p>
 
-    <pre>{{ props.fields }}</pre>
+    <u-form
+      :target="object"
+      :fields="fields"
+    />
 
-    <div class="flex gap-2 mt-4">
+    <template #footer>
+      <div class="flex gap-2 justify-between">
+        <u-button
+          :label="props.submitLabel || 'Submit'"
+          loading-auto
+          @click="handleSubmit()"
+        />
+        <u-button
+          variant="soft"
+          color="neutral"
+          :label="props.cancelLabel || 'Cancel'"
+          loading-auto
+          @click="emit('resolve')"
+        />
+      </div>
+    </template>
 
-      <u-button
-        :label="props.submitLabel || 'Submit'"
-        loading-auto
-        @click="handleSubmit()"
-      />
-      
-      <div class="grow" />
-
-      <u-button
-        variant="soft"
-        color="neutral"
-        :label="props.cancelLabel || 'Cancel'"
-        loading-auto
-        @click="emit('resolve')"
-      />
-
-    </div>
-
-  </div>
+  </u-card>
 </template>

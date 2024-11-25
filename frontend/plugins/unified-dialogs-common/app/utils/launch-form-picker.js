@@ -4,6 +4,9 @@ export async function launchFormPickerDialog({ icon, title, description, text, c
   return launchDialog({
     component: defineAsyncComponent({ loader: () => import('../form-picker/dialog.vue') }),
     props: {
+      icon,
+      title,
+      description,
       text,
       classes,
       fields,
@@ -11,11 +14,6 @@ export async function launchFormPickerDialog({ icon, title, description, text, c
       cancelLabel,
       handler,
     },
-    options: {
-      icon,
-      title,
-      description,
-      ...(options || {}),
-    },
+    options,
   });
 }

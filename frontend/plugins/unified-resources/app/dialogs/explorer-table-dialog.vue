@@ -29,7 +29,7 @@ import ExplorerTableCell from '../atoms/explorer-table-cell.vue';
     :subtitle="props.subtitle"
     :text="props.text">
 
-    <u-table
+    <un-table
       :headers="props.headers"
       :items="props.items"
       :actions="props.actions"
@@ -40,7 +40,7 @@ import ExplorerTableCell from '../atoms/explorer-table-cell.vue';
           :data="data"
         />
       </template>
-    </u-table>
+    </un-table>
 
   </u-card>
 </template>

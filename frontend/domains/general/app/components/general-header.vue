@@ -47,7 +47,7 @@ async function logoutUser() {
           ]">
           <u-button
             variant="ghost"
-            icon="i-mdi-account-outline"
+            icon="i-mdi-account"
             color="neutral"
           />
         </u-dropdown-menu>

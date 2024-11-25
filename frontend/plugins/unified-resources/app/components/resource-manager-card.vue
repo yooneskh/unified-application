@@ -149,34 +149,24 @@ defineExpose({
 <template>
   <section>
 
-    <div class="flex items-center">
-
-      <u-icon
-        v-if="props.icon"
-        :name="props.icon"
-        class="me-2 text-xl"
-      />
-
-      <div class="text-xl font-bold">
-        {{ props.title ?? `Manage ${radTitle(pluralize(props.resource))}` }}
-      </div>
-
-      <div class="grow" />
-
-      <u-button
-        icon="i-mdi-plus"
-        label="Create New"
-        loading-auto
-        @click="handleCreate()"
-      />
-
-    </div>
+    <un-typography
+      :icon="props.icon ?? 'i-mdi-table'"
+      :title="props.title ?? `Manage ${radTitle(pluralize(props.resource))}`">
+      <template #append>
+        <u-button
+          icon="i-mdi-plus"
+          label="Create New"
+          loading-auto
+          @click="handleCreate()"
+        />
+      </template>
+    </un-typography>
 
     <resource-explorer-table
       ref="elExplorer"
       :resource="props.resource"
       :actions="tableActions"
-      class="mt-2"
+      class="mt-3"
     />
 
   </section>

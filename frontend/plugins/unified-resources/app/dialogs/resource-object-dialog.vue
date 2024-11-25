@@ -94,26 +94,28 @@ async function submitObject() {
   <u-card>
 
     <template #header>
-      <div class="flex items-center gap-3">
-        <u-icon name="i-mdi-folder" class="text-xl" />
-        <div class="text-lg font-bold">
-          {{ isCreating ? 'Create a' : 'Update the' }} {{ props.resource }}
-        </div>
-      </div>
+      <un-typography
+        icon="i-mdi-folder"
+        :title="`${isCreating ? 'Create a' : 'Update the'} ${props.resource}`"
+        description="Enter the information in the form below.">
+        <template #append>
+          <u-button
+            variant="ghost"
+            color="neutral"
+            icon="i-mdi-close"
+            @click="emit('resolve')"
+          />
+        </template>
+      </un-typography>
     </template>
-
-    <p>
-      Enter the information in the form below.
-    </p>
 
     <u-form
       :target="object"
       :fields="fields"
-      class="mt-3"
     />
 
     <template #footer>
-      <div class="flex justify-between mt-4">
+      <div class="flex justify-between">
         <u-button
           :icon="isCreating ? 'i-mdi-plus' : 'i-mdi-pencil'"
           :label="`${isCreating ? 'Create a' : 'Update the'} ${props.resource}`"

@@ -8,10 +8,6 @@ const props = defineProps({
   selectedResources: Array,
 });
 
-const emit = defineEmits([
-
-]);
-
 
 /* resource */
 
@@ -125,7 +121,7 @@ import ExplorerTableFilterItem from '../atoms/explorer-table-filter-item.vue';
 <template>
   <div>
 
-    <y-table
+    <un-table
       :headers="headers"
       :items="items"
       :selected-items="props.selectedResources"
@@ -174,7 +170,7 @@ import ExplorerTableFilterItem from '../atoms/explorer-table-filter-item.vue';
         />
       </template>
 
-    </y-table>
+    </un-table>
 
     <div class="py-3 flex justify-between">
       <u-pagination

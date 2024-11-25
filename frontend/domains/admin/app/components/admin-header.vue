@@ -12,6 +12,8 @@ const { data: links } = await useUFetch('/admin/header/links');
     <template #inside-bottom>
       <content-container>
         <u-navigation-menu
+          color="neutral"
+          arrow
           :items="
             links.map(it => ({
               ...it,
