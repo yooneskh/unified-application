@@ -12,10 +12,6 @@ const props = defineProps({
   extraObjectActions: Array,
 });
 
-const emit = defineEmits([
-
-]);
-
 
 /* meta */
 

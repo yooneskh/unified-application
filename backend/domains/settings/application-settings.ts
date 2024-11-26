@@ -30,6 +30,14 @@ export function install(app: IUnifiedApp) {
 
 
   app.addActions({
+    'meta': {
+      method: 'get',
+      path: '/application-settings/meta',
+      requirePermission: 'admin.settings.application-settings.meta',
+      handler: () => {
+        return app.models['ApplicationSetting'];
+      },
+    },
     'retrieve': {
       method: 'get',
       path: '/application-settings/',

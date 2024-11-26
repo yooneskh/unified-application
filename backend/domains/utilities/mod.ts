@@ -21,6 +21,15 @@ export function install(app: IUnifiedApp) {
               },
             ],
           },
+          {
+            label: 'Settings',
+            children: [
+              {
+                label: 'Application Settings',
+                to: { name: 'admin.settings', params: { settingIdentifier: 'application-settings' } },
+              },
+            ],
+          },
         ];
       },
     },

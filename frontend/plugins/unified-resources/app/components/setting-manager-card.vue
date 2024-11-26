@@ -1,18 +1,15 @@
 <script setup>
 
-const language = useLanguage();
+import pluralize from 'pluralize';
 
 
 /* interface */
 
 const props = defineProps({
+  icon: String,
   title: String,
   resource: String,
 });
-
-const emit = defineEmits([
-
-]);
 
 
 /* fields */
@@ -29,39 +26,32 @@ const { resourceUrlPart } = useResourceUrl({
 });
 
 const { data: object, refresh: refreshObject } = useUFetch(
-  computed(() => `/${resourceUrlPart.value}/`),
-  {
-    query: {
-      'filters': computed(() => `lang:eq:${language.value}`),
-    },
-  }
+  computed(() => `/${resourceUrlPart.value}/`)
 );
 
 
 /* submission */
 
-const submitting = ref(false);
-
 async function submitSettings() {
 
-  if (!object.value.lang) {
-    object.value.lang = language.value;
-  }
+  const body = {
+    ...object.value,
+    _id: undefined,
+    createdAt: undefined,
+    updatedAt: undefined,
+  };
+
 
   await ufetch(`/${resourceUrlPart.value}/`, {
-    loading: submitting,
     method: 'patch',
-    body: object.value,
-    query: {
-      'filters': `lang:eq:${language.value}`,
-    },
+    body,
   });
 
 
   refreshObject();
 
   toastSuccess({
-    title: 'Settings was saved.',
+    title: 'Settings were saved.',
   });
 
 }
@@ -75,27 +65,24 @@ async function submitSettings() {
 <template>
   <section>
 
-    <div class="flex items-start justify-between">
-
-      <span class="text-xl font-bold">
-        {{ props.title }}
-      </span>
-
-      <u-btn
-        color="primary"
-        icon="i-bx-upload"
-        label="Save Settings"
-        :loading="submitting"
-        @click="submitSettings()"
-      />
-
-    </div>
+    <un-typography
+      :icon="props.icon ?? 'i-mdi-cog'"
+      :title="props.title ?? `Configure ${radTitle(pluralize(props.resource))}`">
+      <template #append>
+        <u-button
+          icon="i-mdi-upload"
+          label="Save Settings"
+          loading-auto
+          @click="submitSettings()"
+        />
+      </template>
+    </un-typography>
 
     <u-form
       v-if="object"
       :target="object"
       :fields="fields"
-      class="mt-4"
+      class="mt-3"
     />
 
   </section>
