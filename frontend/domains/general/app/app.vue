@@ -19,15 +19,25 @@ useSeoMeta({
 
 
 <template>
-  <u-app>
 
-    <nuxt-route-announcer />
-    
-    <nuxt-layout>
-      <nuxt-page />
-    </nuxt-layout>
+  <nuxt-route-announcer />
+  
+  <nuxt-layout>
+    <nuxt-page />
+  </nuxt-layout>
 
-    <unified-dialogs-provider />
+  <unified-toasts-provider />
+  <!-- <unified-dialogs-provider /> -->
 
-  </u-app>
 </template>
+
+
+<style>
+  :root {
+    color: theme('colors.on-surface');
+    background-color: theme('colors.surface');
+  }
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+</style>

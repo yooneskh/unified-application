@@ -1,34 +1,47 @@
+// @unocss-include
+import { useToasts } from '../lib/use-toasts';
 
 
-function launchToast(toast: Partial<import("@nuxt/ui/runtime/composables/useToast.js").Toast>) {
-  useToast().add(toast);
+type IToast = {
+  icon?: string;
+  text: string;
+  classes?: string;
+  duration?: number;
 }
 
-export function toast(toast: Partial<import("@nuxt/ui/runtime/composables/useToast.js").Toast>) {
+function launchToast(toast: IToast) {
+  useToasts().value.push({
+    key: makeUuid(),
+    ...toast,
+  });
+}
+
+export function toast(toast: IToast) {
   launchToast(toast);
 }
 
-export function toastSuccess(toast: Partial<import("@nuxt/ui/runtime/composables/useToast.js").Toast>) {
+export function toastSuccess(toast: IToast) {
   launchToast({
-    color: 'success',
     icon: 'i-mdi-check',
     ...toast,
+    classes: `success ${toast.classes || ''}`,
   });
 }
 
-export function toastError(toast: Partial<import("@nuxt/ui/runtime/composables/useToast.js").Toast>) {
+export function toastError(toast: IToast) {
   launchToast({
-    color: 'error',
     icon: 'i-mdi-alert',
     ...toast,
+    classes: `danger ${toast.classes || ''}`,
   });
 }
 
-export function toastWarning(toast: Partial<import("@nuxt/ui/runtime/composables/useToast.js").Toast>) {
+export function toastWarning(toast: IToast) {
   launchToast({
-    color: 'warning',
     icon: 'i-mdi-bell',
+    duration: 1000000,
     ...toast,
+    classes: `warning ${toast.classes || ''}`,
   });
 }
 

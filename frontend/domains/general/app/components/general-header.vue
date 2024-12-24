@@ -1,14 +1,14 @@
 <script setup>
 
 const config = useAppConfig();
-const user = useUser();
+// const user = useUser();
 
 
 /* logout */
 
 async function logoutUser() {
-  await authenticationLogoutUser(useToken(), useUser());
-  navigateTo({ name: 'general.home' });
+  // await authenticationLogoutUser(useToken(), useUser());
+  // navigateTo({ name: 'general.home' });
 }
 
 </script>
@@ -25,7 +25,7 @@ async function logoutUser() {
 
       <div class="grow" />
 
-      <template v-if="user">
+      <!-- <template v-if="user">
         <u-dropdown-menu
           :items="[
             {
@@ -59,7 +59,7 @@ async function logoutUser() {
           size="sm"
           :to="{ name: 'authentication' }"
         />
-      </template>
+      </template> -->
 
     </content-container>
 

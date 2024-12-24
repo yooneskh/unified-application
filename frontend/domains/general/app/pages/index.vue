@@ -20,14 +20,12 @@ useHead({
       Hello to Unified Components!
     </p>
 
-    <u-button
-      variant="soft"
-      icon="i-mdi-github"
-      label="Open Github"
-      size="sm"
-      to="https://github.com/yooneskh"
-      target="_blank"
-    />
+    <nuxt-link to="https://github.com/yooneskh" target="_blank">
+      <u-btn
+        icon="i-mdi-github"
+        label="Open Github"
+      />
+    </nuxt-link>
 
   </content-container>
 </template>
