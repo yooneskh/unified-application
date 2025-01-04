@@ -3,7 +3,7 @@
   "specifiers": {
     "jsr:@josefabio/deno-canvas@1.5.2": "1.5.2",
     "jsr:@std/encoding@~0.224.2": "0.224.3",
-    "jsr:@std/fs@1.0.6": "1.0.6",
+    "jsr:@std/fs@1.0.8": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@unified/deno-config@1.0.2": "1.0.2",
     "jsr:@unified/kv@0.4.2": "0.4.2",
@@ -21,8 +21,8 @@
     "@std/encoding@0.224.3": {
       "integrity": "5e861b6d81be5359fad4155e591acf17c0207b595112d1840998bb9f476dbdaf"
     },
-    "@std/fs@1.0.6": {
-      "integrity": "42b56e1e41b75583a21d5a37f6a6a27de9f510bcd36c0c85791d685ca0b85fa2",
+    "@std/fs@1.0.8": {
+      "integrity": "161c721b6f9400b8100a851b6f4061431c538b204bb76c501d02c508995cffe0",
       "dependencies": [
         "jsr:@std/path"
       ]
@@ -55,7 +55,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@josefabio/deno-canvas@1.5.2",
-      "jsr:@std/fs@1.0.6",
+      "jsr:@std/fs@1.0.8",
       "jsr:@unified/deno-config@1.0.2",
       "jsr:@unified/kv@0.4.2",
       "npm:radash@12.1.0"

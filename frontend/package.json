@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@formkit/tempo": "0.1.2",
-    "nuxt": "3.14.1592",
-    "unified-components": "0.6.21",
+    "nuxt": "3.15.0",
+    "unified-components": "0.6.22",
     "unified-mongo-filter": "0.3.1",
     "vue": "3.5.13",
     "vue3-persian-datetime-picker": "1.2.2"
