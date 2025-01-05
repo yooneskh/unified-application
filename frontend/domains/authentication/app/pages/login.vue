@@ -152,28 +152,21 @@ async function submitLoadUser(loginToken) {
 <template>
   <div class="min-h-screen flex items-center justify-center p-3">
 
-    <u-card class="w-full max-w-md">
-
-      <template #header>
-        <div class="text-xl font-bold text-center">
-          Login | Register
-        </div>
-      </template>
+    <u-card title="Login | Register" title-classes="text-center" class="w-full max-w-md">
 
       <template v-if="mode === 'login'">
 
-        <p class="mb-4">
+        <p class="my-4">
           If you already have an account, please enter your email below and click on "Login". <br />
           If you don't have an account, please click on "Register".
         </p>
 
-        <u-form-field label="Email">
-          <u-input
-            class="block"
-            inputmode="email"
-            v-model="email"
-          />
-        </u-form-field>
+        <u-input
+          label="Email"
+          class="block"
+          inputmode="email"
+          v-model="email"
+        />
 
         <captcha-input
           :key="mode"
@@ -181,25 +174,36 @@ async function submitLoadUser(loginToken) {
           v-model:captcha-id="captchaId"
           v-model:captcha-text="captchaText"
         />
+
+        <div class="flex flex-col gap-2 mt-4">
+          <u-btn
+            label="Login"
+            :click-handler="doLogin"
+          />
+          <u-btn
+            label="Register"
+            class="soft"
+            @click="directRegister = true; mode = 'register';"
+          />
+        </div>
 
       </template>
 
       <template v-if="mode === 'register'">
 
-        <p v-if="!directRegister" class="mb-4">
+        <p v-if="!directRegister" class="my-4">
           There is no account with this email <strong>"{{ email }}"</strong>, if you want to create a new account, please enter the captcha below and click on "Create new account".
         </p>
-        <p v-else class="mb-4">
+        <p v-else class="my-4">
           Please enter your email below, enter the captcha and click on "Create new account".
         </p>
 
-        <u-form-field v-if="directRegister" label="Email">
-          <u-input
-            class="block"
-            inputmode="email"
-            v-model="email"
-          />
-        </u-form-field>
+        <u-input
+          v-if="directRegister"
+          label="Email"
+          inputmode="email"
+          v-model="email"
+        />
 
         <captcha-input
           :key="mode"
@@ -208,61 +212,35 @@ async function submitLoadUser(loginToken) {
           v-model:captcha-text="captchaText"
         />
 
+        <div class="flex flex-col gap-2 mt-4">
+          <u-btn
+            label="Create new account"
+            :click-handler="doRegister"
+          />
+        </div>
+
       </template>
 
       <template v-if="mode === 'verify'">
 
-        <p class="mb-4">
+        <p class="my-4">
           Please enter the code sent to you at <strong>"{{ email }}"</strong> below and click on "Verify".
         </p>
 
-        <u-form-field label="Verification code">
-          <u-input
-            class="block"
-            inputmode="numeric"
-            v-model="verificationCode"
+        <u-input
+          label="Verification code"
+          class="block"
+          inputmode="numeric"
+          v-model="verificationCode"
+        />
+
+        <div class="flex flex-col gap-2 mt-4">
+          <u-btn
+            label="Verify"
+            :click-handler="submitVerification"
           />
-        </u-form-field>
+        </div>
 
-      </template>
-
-      <template #footer>
-        <template v-if="mode === 'login'">
-          <div class="flex flex-col gap-2">
-            <u-button
-              label="Login"
-              class="justify-center"
-              loading-auto
-              @click="doLogin()"
-            />
-            <u-button
-              variant="soft"
-              label="Register"
-              class="justify-center"
-              @click="directRegister = true; mode = 'register';"
-            />
-          </div>
-        </template>
-        <template v-if="mode === 'register'">
-          <div class="flex flex-col gap-2">
-            <u-button
-              label="Create new account"
-              class="justify-center"
-              loading-auto
-              @click="doRegister()"
-            />
-          </div>
-        </template>
-        <template v-if="mode === 'verify'">
-          <div class="flex flex-col gap-2">
-            <u-button
-              label="Verify"
-              class="justify-center"
-              loading-auto
-              @click="submitVerification()"
-            />
-          </div>
-        </template>
       </template>
 
     </u-card>

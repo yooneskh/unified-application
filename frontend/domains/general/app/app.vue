@@ -40,4 +40,7 @@ useSeoMeta({
   body {
     font-family: 'Poppins', sans-serif;
   }
+  .btn {
+    justify-content: center;
+  }
 </style>

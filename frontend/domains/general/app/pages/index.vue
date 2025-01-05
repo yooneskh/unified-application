@@ -24,6 +24,7 @@ useHead({
       <u-btn
         icon="i-mdi-github"
         label="Open Github"
+        class="text-sm"
       />
     </nuxt-link>
 

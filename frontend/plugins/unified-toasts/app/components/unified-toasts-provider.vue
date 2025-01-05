@@ -48,7 +48,7 @@ import FadingLinearProgress from '../atoms/fading-linear-progress.vue';
           @click="handleToastFinish(toast, true)">
   
           <fading-linear-progress
-            :duration="toast.duration || 5000000"
+            :duration="toast.duration"
             class="absolute top-0 left-0"
             @finished="handleToastFinish(toast)"
           />

@@ -2,15 +2,6 @@
 
 /* interface */
 
-const props = defineProps({
-
-});
-
-const emit = defineEmits([
-
-]);
-
-
 const captchaId = defineModel('captchaId');
 const captchaText = defineModel('captchaText');
 
@@ -33,13 +24,12 @@ watch(() => captchaData.value?.captchaId, () => {
 <template>
   <div>
 
-    <u-form-field label="Enter the number below">
-      <u-input
-        class="block"
-        inputmode="numeric"
-        v-model="captchaText"
-      />
-    </u-form-field>
+    <u-input
+      label="Enter the number below"
+      inputmode="numeric"
+      class="block"
+      v-model="captchaText"
+    />
 
     <div class="flex items-center justify-center gap-1 mt-3">
 
@@ -48,10 +38,10 @@ watch(() => captchaData.value?.captchaId, () => {
         class="rounded"
       />
 
-      <u-button
-        variant="ghost"
+      <u-btn
         icon="i-mdi-refresh"
         tabindex="-1"
+        class="ghost"
         @click="refresh();"
       />
 
