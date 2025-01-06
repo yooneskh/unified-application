@@ -14,11 +14,6 @@ const isValid = defineModel('isValid', {
 });
 
 
-const emit = defineEmits([
-
-]);
-
-
 /* integration */
 
 import ElementText from '../../unified-form-elements/elements/element-text.vue';

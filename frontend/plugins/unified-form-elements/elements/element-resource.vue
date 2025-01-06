@@ -44,23 +44,16 @@ async function selectResource() {
 
 }
 
-
-/* template */
-
 </script>
 
 
 <template>
-  <u-form-field
-    v-bind="radPick(props.field, ['label', 'description', 'hint', 'help', 'size'])"
-    :error="props.error ? props.messages?.join(' - ') : undefined">
-    <u-input
-      v-bind="radOmit(props.field, ['key', 'identifier', 'label', 'description', 'hint', 'help', 'size'])"
-      class="block"
-      readonly
-      :loading="props.field.loading || loading"
-      :model-value="title"
-      @click="selectResource()"
-    />
-  </u-form-field>
+  <u-input
+    v-bind="radOmit(props.field, ['key', 'identifier'])"
+    class="block"
+    readonly
+    :loading="props.field.loading || loading"
+    :model-value="title"
+    @click="selectResource()"
+  />
 </template>

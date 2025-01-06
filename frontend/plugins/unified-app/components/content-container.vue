@@ -1,15 +1,5 @@
 <script setup>
 
-/* interface */
-
-const props = defineProps({
-
-});
-
-const emit = defineEmits([
-
-]);
-
 </script>
 
 

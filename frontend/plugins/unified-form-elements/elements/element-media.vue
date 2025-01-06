@@ -33,7 +33,7 @@ async function openMediaSelector() {
       title: 'Media Gallery',
       description: 'Select media from your gallery.',
       class: '!max-w-5xl',
-    }
+    },
   });
 
   if (!result) {
@@ -63,9 +63,6 @@ watch(modelValue, async () => {
   mediaObject.value = data;
 
 }, { immediate: true });
-
-
-/* template */
 
 </script>
 
@@ -98,17 +95,12 @@ watch(modelValue, async () => {
   
       </nuxt-link>
     </template> -->
-  <u-form-field
-    v-bind="radPick(props.field, ['label', 'description', 'hint', 'help', 'size'])"
-    :error="props.error ? props.messages?.join(' - ') : undefined">
-    <u-input
-      icon="i-mdi-file"
-      v-bind="radOmit(props.field, ['key', 'identifier', 'label', 'description', 'hint', 'help', 'size'])"
-      class="block"
-      :loading="props.field.loading || loading"
-      readonly
-      :model-value="fieldText"
-      @click="openMediaSelector()"
-    />
-  </u-form-field>
+  <u-input
+    inner-icon="i-mdi-file"
+    v-bind="radOmit(props.field, ['key', 'identifier'])"
+    :loading="props.field.loading || loading"
+    readonly
+    :model-value="fieldText"
+    @click="openMediaSelector()"
+  />
 </template>

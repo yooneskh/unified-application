@@ -80,17 +80,6 @@ function handleDateChange(newDate) {
 }
 
 
-/* props */
-
-const formFieldProps = computed(() =>
-  radPick(props.field, ['label', 'description', 'hint', 'help', 'size'])
-);
-
-const inputProps = computed(() =>
-  radOmit(props.field, ['key', 'identifier', 'label', 'description', 'hint', 'help', 'size', 'dateType'])
-);
-
-
 /* template */
 
 const DatePicker = defineAsyncComponent(() =>
@@ -103,36 +92,28 @@ const DatePicker = defineAsyncComponent(() =>
 <template>
   <div>
 
-    <u-popover v-model:open="isOpened">
-      <u-form-field
-        v-bind="formFieldProps"
-        :error="props.error ? props.messages?.join(' - ') : undefined">
-        <u-input
-          v-bind="inputProps"
-          class="block"
-          readonly
-          :model-value="fieldTitle"
-        />
-      </u-form-field>
-      <template #content>
-        <div class="text-black">
-          <date-picker
-            format="YYYY/MM/DD HH:mm"
-            :type="props.field.dateType"
-            locale="en"
-            inline
-            class="
-              [&>.vpd-input-group]:!hidden vpd-datepicker-form-element
-              [&_.vpd-next]:flex [&_.vpd-next]:items-center [&_.vpd-next]:justify-center
-              [&_.vpd-prev]:flex [&_.vpd-prev]:items-center [&_.vpd-prev]:justify-center
-              [&_.vpd-time-column_svg]:m-auto
-            "
-            :modelValue="fieldValue"
-            @update:model-value="handleDateChange($event); isOpened = false;"
-          />
-        </div>
-      </template>
-    </u-popover>
+    <u-input
+      v-bind="radOmit(props.field, ['key', 'identifier', 'dateType'])"
+      readonly
+      :model-value="fieldTitle"
+    />
+
+    <u-dropdown>
+      <date-picker
+        format="YYYY/MM/DD HH:mm"
+        :type="props.field.dateType"
+        locale="en"
+        inline
+        class="
+          [&>.vpd-input-group]:!hidden vpd-datepicker-form-element
+          [&_.vpd-next]:flex [&_.vpd-next]:items-center [&_.vpd-next]:justify-center
+          [&_.vpd-prev]:flex [&_.vpd-prev]:items-center [&_.vpd-prev]:justify-center
+          [&_.vpd-time-column_svg]:m-auto
+        "
+        :model-value="fieldValue"
+        @update:model-value="handleDateChange($event); isOpened = false;"
+      />
+    </u-dropdown>
 
   </div>
 </template>

@@ -24,11 +24,6 @@ const isValid = defineModel('isValid', {
 });
 
 
-const emit = defineEmits([
-
-]);
-
-
 /* breakpoints */
 
 const { width: windowWidth } = useWindowSize();

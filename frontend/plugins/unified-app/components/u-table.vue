@@ -18,10 +18,6 @@ const props = defineProps({
   selectedItems: Array,
 });
 
-const emit = defineEmits([
-
-]);
-
 </script>
 
 

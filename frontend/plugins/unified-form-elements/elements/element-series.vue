@@ -51,9 +51,9 @@ function handleMoveItem(item, index, direction) {
 
 
 <template>
-  <div class="ring ring-inset ring-[var(--ui-border-accented)] rounded-[calc(var(--ui-radius))]">
+  <div class="border rounded">
 
-    <label class="text-sm font-medium text-[var(--ui-text)] flex items-center gap-2 py-2 px-3 border-b border-[var(--ui-border-accented)]">
+    <label class="text-sm font-medium flex items-center gap-2 px-2 py-1 border-b">
 
       <span>
         {{ props.field.label }}
@@ -63,11 +63,10 @@ function handleMoveItem(item, index, direction) {
         ({{ (modelValue?.length > 0) ? (`${modelValue.length} items`) : ('No items') }})
       </span>
 
-      <u-button
-        variant="soft"
+      <u-btn
         icon="i-mdi-plus"
         label="New item"
-        size="xs"
+        class="soft text-xs"
         @click="handleAddItem()"
       />
 
@@ -81,7 +80,7 @@ function handleMoveItem(item, index, direction) {
 
     <div
       v-else
-      class="p-3 grid gap-3"
+      class="p-2 grid gap-2"
       :class="{
         'grid-cols-1': props.field.seriesColumns === 1 || !props.field.seriesColumns,
         'grid-cols-2': props.field.seriesColumns === 2,
@@ -97,42 +96,34 @@ function handleMoveItem(item, index, direction) {
         <u-form
           :target="item"
           :fields="props.field.itemFields"
-          class="p-3 ring ring-inset ring-[var(--ui-border-accented)] rounded-[calc(var(--ui-radius))]"
+          class="p-2 border rounded"
         />
 
         <div class="absolute top-2 end-2 opacity-0 pointer-events-none transition-all group-hover:opacity-100 group-hover:pointer-events-auto flex gap-1">
 
-          <u-button
-            variant="soft"
+          <u-btn
             icon="i-mdi-content-copy"
-            color="neutral"
-            size="xs"
+            class="soft text-xs"
             @click="handleDuplicateItem(item, index)"
           />
 
-          <u-button
+          <u-btn
             v-if="index > 0"
-            variant="soft"
             icon="i-mdi-chevron-left"
-            color="neutral"
-            size="xs"
+            class="soft text-xs"
             @click="handleMoveItem(item, index, -1)"
           />
 
-          <u-button
+          <u-btn
             v-if="index < modelValue.length - 1"
-            variant="soft"
             icon="i-mdi-chevron-right"
-            color="neutral"
-            size="xs"
+            class="soft text-xs"
             @click="handleMoveItem(item, index, 1)"
           />
 
-          <u-button
-            variant="soft"
+          <u-btn
             icon="i-mdi-delete"
-            color="error"
-            size="xs"
+            class="soft danger text-xs"
             @click="handleDeleteItem(item, index)"
           />
 

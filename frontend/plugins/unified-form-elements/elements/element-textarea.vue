@@ -11,20 +11,12 @@ const props = defineProps({
 
 const modelValue = defineModel();
 
-
-/* template */
-
 </script>
 
 
 <template>
-  <u-form-field
-    v-bind="radPick(props.field, ['label', 'description', 'hint', 'help', 'size'])"
-    :error="props.error ? props.messages?.join(' - ') : undefined">
-    <u-textarea
-      v-bind="radOmit(props.field, ['key', 'identifier', 'label', 'description', 'hint', 'help', 'size'])"
-      class="block"
-      v-model="modelValue"
-    />
-  </u-form-field>
+  <u-textarea
+    v-bind="radOmit(props.field, ['key', 'identifier'])"
+    v-model="modelValue"
+  />
 </template>
