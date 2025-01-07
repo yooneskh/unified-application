@@ -1,7 +1,7 @@
 import { useDialogs } from '../states/dialogs';
 
 
-export function launchDialog({ component, props, options }) {
+export function launchDialog({ component, props, options, onResolve, onReject }) {
   
   const dialogs = useDialogs();
 
@@ -13,6 +13,8 @@ export function launchDialog({ component, props, options }) {
       modelValue: false,
       props: props ?? {},
       options: options ?? {},
+      onResolve: onResolve,
+      onReject: onReject,
       resolve,
       reject,
     });

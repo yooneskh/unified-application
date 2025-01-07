@@ -8,6 +8,30 @@ const dialogs = useDialogs();
 
 /* remove */
 
+async function resolveDialog(dialog, value) {
+
+  removeDialog(dialog);
+
+  if (dialog.onResolve) {
+    await dialog.onResolve(value);
+  }
+
+  dialog.resolve(value);
+
+}
+
+async function rejectDialog(dialog, value) {
+
+  removeDialog(dialog);
+
+  if (dialog.onReject) {
+    await dialog.onReject(value);
+  }
+
+  dialog.reject(value);
+
+}
+
 function removeDialog(dialog) {
 
   dialog.modelValue = false;
@@ -25,26 +49,16 @@ function removeDialog(dialog) {
 
 
 <template>
-  <u-modal
+  <u-dialog
     v-for="dialog of dialogs" :key="dialog.key"
     v-bind="dialog.options"
-    :open="dialog.modelValue"
-    @update:open="dialog.resolve(undefined); removeDialog(dialog);">
-    <template v-if="dialog.options?.title || dialog.options?.description" #body>
-      <component
-        :is="dialog.component"
-        v-bind="dialog.props"
-        @resolve="dialog.resolve($event); removeDialog(dialog);"
-        @reject="dialog.reject($event); removeDialog(dialog);"
-      />
-    </template>
-    <template v-else #content>
-      <component
-        :is="dialog.component"
-        v-bind="dialog.props"
-        @resolve="dialog.resolve($event); removeDialog(dialog);"
-        @reject="dialog.reject($event); removeDialog(dialog);"
-      />
-    </template>
-  </u-modal>
+    :model-value="dialog.modelValue"
+    @update:model-value="resolveDialog(dialog, undefined)">
+    <component
+      :is="dialog.component"
+      v-bind="dialog.props"
+      @resolve="resolveDialog(dialog, $event);"
+      @reject="rejectDialog(dialog, $event);"
+    />
+  </u-dialog>
 </template>

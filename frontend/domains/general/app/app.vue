@@ -27,7 +27,7 @@ useSeoMeta({
   </nuxt-layout>
 
   <unified-toasts-provider />
-  <!-- <unified-dialogs-provider /> -->
+  <unified-dialogs-provider />
 
 </template>
 
