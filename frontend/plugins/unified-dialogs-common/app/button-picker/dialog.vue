@@ -1,14 +1,14 @@
-<script setup>
+<script setup lang="ts">
 
-const props = defineProps({
-  icon: String,
-  title: String,
-  description: String,
-  text: String,
-  classes: String,
-  startButtons: Array,
-  endButtons: Array,
-});
+const props = defineProps<{
+  icon?: string,
+  title?: string,
+  subtitle?: string,
+  text?: string,
+  classes?: string,
+  startButtons?: { value: string; label?: string; icon?: string; classes?: string; handler?: () => void; }[],
+  endButtons?: { value: string; label?: string; icon?: string; classes?: string; handler?: () => void; }[],
+}>();
 
 const emit = defineEmits([
   'resolve',
@@ -17,7 +17,7 @@ const emit = defineEmits([
 
 /* button handling */
 
-async function handleButtonClick(button) {
+async function handleButtonClick(button: { value: string; label?: string; icon?: string; classes?: string; handler?: () => void; }) {
 
   if (!button.handler) {
     emit('resolve', button.value || button.label);
@@ -37,47 +37,28 @@ async function handleButtonClick(button) {
 
 
 <template>
-  <u-card :class="props.classes">
+  <u-card
+    :icon="props.icon"
+    :title="props.title"
+    :subtitle="props.subtitle"
+    :text="props.text"
+    :class="props.classes">
 
-    <template #header>
-      <un-typography
-        :icon="props.icon"
-        :title="props.title"
-        :description="props.description">
-        <template #append>
-          <u-button
-            variant="ghost"
-            color="neutral"
-            icon="i-mdi-close"
-            @click="emit('resolve')"
-          />
-        </template>
-      </un-typography>
-    </template>
-
-    <p v-if="props.text">
-      {{ props.text }}
-    </p>
-
-    <template #footer>
-      <div class="flex gap-2">
-        <u-button
-          v-for="(button, index) of props.startButtons" :key="button.value || index"
-          v-bind="button"
-          :class="button.classes"
-          loading-auto
-          @click="handleButtonClick(button)"
-        />
-        <div class="grow" />
-        <u-button
-          v-for="(button, index) of props.endButtons" :key="button.value || index"
-          v-bind="button"
-          :class="button.classes"
-          loading-auto
-          @click="handleButtonClick(button)"
-        />
-      </div>
-    </template>
+    <div class="flex gap-2 mt-4">
+      <u-btn
+        v-for="(button, index) of props.startButtons" :key="button.value || index"
+        v-bind="button"
+        :class="button.classes"
+        :click-handler="() => handleButtonClick(button)"
+      />
+      <div class="grow" />
+      <u-btn
+        v-for="(button, index) of props.endButtons" :key="button.value || index"
+        v-bind="button"
+        :class="button.classes"
+        :click-handler="() => handleButtonClick(button)"
+      />
+    </div>
 
   </u-card>
 </template>

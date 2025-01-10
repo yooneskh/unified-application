@@ -1,16 +1,16 @@
-<script setup>
+<script setup lang="ts">
 
-const props = defineProps({
-  icon: String,
-  title: String,
-  description: String,
-  text: String,
-  classes: String,
-  fields: Array,
-  submitLabel: Array,
-  cancelLabel: Array,
-  handler: Function,
-});
+const props = defineProps<{
+  icon: string,
+  title: string,
+  subtitle: string,
+  text: string,
+  classes: string,
+  fields: any[],
+  submitLabel: string,
+  cancelLabel: string,
+  handler: (form: any) => void,
+}>();
 
 const emit = defineEmits([
   'resolve',
@@ -25,7 +25,7 @@ async function handleSubmit() {
 
   if (!props.handler) {
     emit('resolve', form);
-    return
+    return;
   }
 
 
@@ -41,49 +41,31 @@ async function handleSubmit() {
 
 
 <template>
-  <u-card :class="props.classes">
-
-    <template #header>
-      <un-typography
-        :icon="props.icon"
-        :title="props.title"
-        :description="props.description">
-        <template #append>
-          <u-button
-            variant="ghost"
-            color="neutral"
-            icon="i-mdi-close"
-            @click="emit('resolve')"
-          />
-        </template>
-      </un-typography>
-    </template>
-
-    <p v-if="props.text" class="mb-3">
-      {{ props.text }}
-    </p>
+  <u-card
+    :icon="props.icon"
+    :title="props.title"
+    :subtitle="props.subtitle"
+    :text="props.text"
+    :class="props.classes">
 
     <u-form
-      :target="object"
+      :target="form"
       :fields="fields"
+      class="my-4"
     />
 
-    <template #footer>
-      <div class="flex gap-2 justify-between">
-        <u-button
-          :label="props.submitLabel || 'Submit'"
-          loading-auto
-          @click="handleSubmit()"
-        />
-        <u-button
-          variant="soft"
-          color="neutral"
-          :label="props.cancelLabel || 'Cancel'"
-          loading-auto
-          @click="emit('resolve')"
-        />
-      </div>
-    </template>
+    <div class="flex gap-2 justify-between mt-4">
+      <u-btn
+        :label="props.submitLabel || 'Submit'"
+        loading-auto
+        :click-handler="handleSubmit"
+      />
+      <u-btn
+        :label="props.cancelLabel || 'Cancel'"
+        class="soft"
+        @click="emit('resolve')"
+      />
+    </div>
 
   </u-card>
 </template>

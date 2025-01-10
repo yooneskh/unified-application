@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   },
   extends: [
     // '../unified-resources',
-    // '../unified-dialogs-common',
+    '../unified-dialogs-common',
     '../unified-dialogs',
     '../unified-toasts',
     '../unified-forms',
